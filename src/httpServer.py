@@ -24,16 +24,20 @@ while True:
         message = connectionSocket.recv(1024).decode()   # Fill in start   #Fill in end
         filename = message.split()[1]
         # f = open(filename[1:])
-        outputdata = "HTTP/1.0 200 OK\n\n"
-        outputdata += "Hello World\n"
+        outputdata = 'HTTP/1.1 200 OK\n\n'
+        fh = open('./html/index.html')   # this is a big security disaster
+        page = fh.read()
+        fh.close()
+        outputdata += page
 
         # Send one HTTP header line into socket
         # Fill in start
+
         # Fill in end
         # Send the content of the requested file to the client
         for i in range(0, len(outputdata)):
             connectionSocket.send(outputdata[i].encode())
-        connectionSocket.send("\r\n".encode())
+        connectionSocket.send("\n\n".encode())
         connectionSocket.close()
     except IOError:
         # Send response message for file not found
