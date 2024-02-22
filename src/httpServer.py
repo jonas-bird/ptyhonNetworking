@@ -22,18 +22,18 @@ while True:
     connectionSocket, addr = serverSocket.accept()   # Fill in start  #Fill in end
     try:
         message = connectionSocket.recv(1024).decode()   # Fill in start   #Fill in end
-        filename = message.split()[1]
-        # f = open(filename[1:])
-        outputdata = 'HTTP/1.1 200 OK\n\n'
-        fh = open('./html/index.html')   # this is a big security disaster
+        requestHeader = message.split('\n')
+        filename = requestHeader[0].split()[1]
+        print(filename)
+        if filename == '/':
+            filename = '/index.html'
+        fh = open('./html' + filename)  # this is a big security disaster
+
+        outputdata = 'HTTP/1.0 200 OK\n\n'
         page = fh.read()
         fh.close()
         outputdata += page
 
-        # Send one HTTP header line into socket
-        # Fill in start
-
-        # Fill in end
         # Send the content of the requested file to the client
         for i in range(0, len(outputdata)):
             connectionSocket.send(outputdata[i].encode())
